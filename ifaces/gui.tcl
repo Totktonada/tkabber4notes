@@ -198,7 +198,7 @@ proc ifaces::gui::delete_focused_note {} {
 
     set lbox .notes.lbox_frame.lbox
     set idx [$lbox index active]
-    ::plugins::notes::set_note $idx {}
+    ::plugins::notes::set_note [::plugins::notes::get_real_index $idx [get_filter_tags]] $idx {}
 }
 
 proc ifaces::gui::edit_note {idx args} {
@@ -240,6 +240,7 @@ proc ifaces::gui::edit_note {idx args} {
     grid $dialog_frame.tags   -row 1 -column 1 -sticky ew
     grid $sw -row 2 -column 0 -columnspan 2 -sticky nw
 
+# TODO: replace ugly get_real_index with notes id.
     $dialog_w add -text [::msgcat::mc "Ok"] \
         -command [list [namespace current]::edit_note_cmd_ok $dialog_w $idx]
     $dialog_w add -text [::msgcat::mc "Cancel"] \
@@ -264,7 +265,7 @@ proc ifaces::gui::edit_note_cmd_ok {dialog_w idx} {
 
     set new_note [::xmpp::private::notes::create $title "" $text $tags_str]
 
-    ::plugins::notes::set_note $idx $new_note
+    ::plugins::notes::set_note [::plugins::notes::get_real_index $idx [get_filter_tags]] $idx $new_note
     destroy $dialog_w
 }
 

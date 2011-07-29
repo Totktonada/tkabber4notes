@@ -212,19 +212,19 @@ proc notes::get_note {idx {search_tags {}}} {
     return [lindex [get_notes $search_tags] $idx]
 }
 
-proc notes::set_note {idx new_note} {
+proc notes::set_note {real_idx idx new_note} {
     variable notes
     variable current_xlib
 
     if {![info exists current_xlib]} return
 
     if {[llength $new_note] == 0} {
-        set notes($current_xlib) [lreplace $notes($current_xlib) $idx $idx]
+        set notes($current_xlib) [lreplace $notes($current_xlib) $real_idx $real_idx]
     } else {
-        if {[cequal $idx end]} {
+        if {[cequal $real_idx end]} {
             lappend notes($current_xlib) $new_note
         } else {
-            lset notes($current_xlib) $idx $new_note
+            lset notes($current_xlib) $real_idx $new_note
         }
     }
 
@@ -265,4 +265,24 @@ proc notes::get_notes {{search_tags {}}} {
     }
 
     return $current_notes
+}
+
+# TODO: replace ugly get_real_index with notes id.
+proc notes::get_real_index {idx {search_tags {}}} {
+    if {[cequal $idx end]} {
+        return end
+    }
+
+    set real_index 0
+    foreach note [get_notes] {
+        if {[filter $note $search_tags]} {
+            incr idx -1
+        }
+        if {$idx < 0} {
+            return $real_index
+        }
+        incr real_index
+    }
+
+    return -1
 }
