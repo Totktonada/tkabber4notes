@@ -99,10 +99,11 @@ proc ifaces::gui::open_window {} {
 }
 
 proc ifaces::gui::create_notes_tab {w} {
-    # button box
+# ==== Button box ====
     set tools [frame $w.tools -borderwidth 5]
     pack $tools -side top -fill y -anchor w
 
+# ==== Buttons ====
     set new_button [button $tools.new_button -text [::msgcat::mc "New note"] \
         -command [list [namespace current]::edit_note end]]
     pack $new_button -anchor w -side left
@@ -110,30 +111,26 @@ proc ifaces::gui::create_notes_tab {w} {
         -command [list [namespace current]::delete_focused_note]]
     pack $delete_button -anchor w -side left
 
-# TODO: from menubutton to OptionMenu?
-#    set conn_menu [OptionMenu $tools.conn_menu [::plugins::notes::connections]]
-
-    # ==== List of connections ====
+# ==== List of connections ====
     set conn_button [menubutton $tools.conn_button \
         -menu $tools.conn_button.menu]
     set conn_menu [menu $conn_button.menu -tearoff 0]
     update_connections_menu
     update_connections_menu_label
     pack $conn_button -anchor w -side left
-    # ==== ====
+# TODO: from menubutton to OptionMenu?
+#    set conn_menu [OptionMenu $tools.conn_menu [::plugins::notes::connections]]
 
-    # main frame
+# ==== lbox frame ====
     set lbox_frame [frame $w.lbox_frame]
     pack $lbox_frame -side left -fill both -expand true -anchor w
 
-    # main frame widget
+# ==== lbox frame scrolled widget ====
     grid columnconfigure $lbox_frame 0 -weight 1
     set sw [ScrolledWindow $lbox_frame.sw]
 
     set lbox [listbox $lbox_frame.lbox -takefocus 1 -exportselection 0]
-    $lbox selection clear 0 end
     update_lbox
-    $lbox selection set 0
     focus $lbox
 
 # ==== Bind ====
@@ -148,8 +145,8 @@ proc ifaces::gui::create_notes_tab {w} {
     bind $lbox <Return> [namespace code {
         edit_note [%W index active]
     }]
-# ====  ====
 
+# ==== Other ====
     $sw setwidget $lbox
     grid $sw -sticky news
     grid rowconfigure $lbox_frame 0 -weight 1
@@ -264,17 +261,28 @@ proc ifaces::gui::update_lbox_at {idx new_note} {
     if {[llength $new_note] != 0} {
         $lbox insert $idx [get_short_string $new_note]
     }
+
+    update_lbox_selection $idx
 }
 
 proc ifaces::gui::update_lbox {} {
     set lbox .notes.lbox_frame.lbox
+
     $lbox delete 0 end
 
     foreach note [::plugins::notes::get_notes] {
         $lbox insert end [get_short_string $note]
     }
-#    $lbox selection clear 0 end
-#    $lbox selection set 0
+
+    update_lbox_selection end
+}
+
+proc ifaces::gui::update_lbox_selection {idx} {
+    set lbox .notes.lbox_frame.lbox
+
+    $lbox selection clear 0 end
+    $lbox selection set $idx
+    $lbox activate $idx
 }
 
 ####################################################################
