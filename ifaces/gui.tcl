@@ -23,6 +23,7 @@ proc ifaces::gui::unload {} {
     desetup_menu
     destroy_win .notes
 #TODO: destroy edit_note window
+# and export_notes window
 
     hook::remove finload_hook [namespace current]::setup_menu
 
@@ -126,6 +127,11 @@ proc ifaces::gui::create_notes_tab {w} {
 # ==== Tags ====
     set tags [entry $tools.tags]
     pack $tags -anchor w -side left
+
+# ==== Export ====
+    set export_button [button $tools.export_button -text [::msgcat::mc "Export"] \
+        -command [list [namespace current]::export_notes_window]]
+    pack $export_button -anchor w -side left
 
 # ==== lbox frame ====
     set lbox_frame [frame $w.lbox_frame]
@@ -301,6 +307,51 @@ proc ifaces::gui::update_lbox_selection {idx} {
     $lbox selection clear 0 end
     $lbox selection set $idx
     $lbox activate $idx
+}
+
+proc ifaces::gui::export_notes_window {} {
+    if {[llength [plugins::notes::connections]] == 0} return
+
+    set dialog_w .export_notes
+    catch { destroy $dialog_w }
+    set dialog_w [Dialog $dialog_w -title [::msgcat::mc "Export"] \
+        -separator 1 \
+        -anchor e \
+        -default 0 \
+        -cancel 1 \
+        -modal none]
+
+    set dialog_frame [$dialog_w getframe]
+    grid columnconfigure $dialog_frame 1 -weight 1
+
+    set file_label [label $dialog_frame.lfile -text [::msgcat::mc "File:"]]
+    set file_entry [entry $dialog_frame.file]
+
+    grid $file_label -row 0 -column 0 -sticky nw
+    grid $file_entry  -row 0 -column 1 -sticky ew
+
+    $dialog_w add -text [::msgcat::mc "Ok"] \
+        -command [list [namespace current]::export_notes_cmd_ok $dialog_w]
+    $dialog_w add -text [::msgcat::mc "Cancel"] \
+        -command [list destroy $dialog_w]
+
+    bind $file_entry <Control-Key-Return> \
+        "[double% $dialog_w] invoke default
+        break"
+    bind $dialog_w <Control-Key-Return> \
+        "[double% $dialog_w] invoke default
+        break"
+
+    $dialog_w draw $file_entry
+}
+
+proc ifaces::gui::export_notes_cmd_ok {dialog_w} {
+    set dialog_frame [$dialog_w getframe]
+
+    set notes_file [$dialog_frame.file get]
+
+    ::plugins::notes::ie::export $notes_file [get_filter_tags]
+    destroy $dialog_w
 }
 
 ####################################################################

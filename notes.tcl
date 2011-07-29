@@ -33,6 +33,8 @@ proc notes::load {} {
         eval ifaces::${iface_name}::load
     }
 
+    source [file join $scriptdir ie.tcl]
+
     hook::add disconnected_hook [namespace current]::disconnected
     hook::add connected_hook [namespace current]::connected
 
