@@ -201,13 +201,13 @@ proc notes::get_current_connection_name {} {
     return $connection_name
 }
 
-proc notes::get_note {idx} {
+proc notes::get_note {idx {search_tags {}}} {
     variable notes
     variable current_xlib
 
 #    if {![info exists current_xlib]} return # Hm... TODO: think.
 
-    return [lindex $notes($current_xlib) $idx]
+    return [lindex [get_notes $search_tags] $idx]
 }
 
 proc notes::set_note {idx new_note} {
@@ -230,14 +230,36 @@ proc notes::set_note {idx new_note} {
     hook::run plugins_notes_changed_note_hook $idx $new_note
 }
 
-proc notes::get_notes {} {
+proc notes::filter {note search_tags} {
+    ::xmpp::private::notes::split $note title tags text tags_str
+
+    foreach search_tag $search_tags {
+        if {[lsearch -exact $tags $search_tag] < 0} {
+            return 0
+        }
+    }
+
+    return 1
+}
+
+proc notes::get_notes {{search_tags {}}} {
     variable notes
     variable current_xlib
 
-    if {[info exists current_xlib]} {
+    set current_notes {}
+
+    if {![info exists current_xlib]} {
+        return $current_notes
+    }
+
+    if {[llength $search_tags] == 0} {
         set current_notes $notes($current_xlib)
     } else {
-        set current_notes {}
+        foreach note $notes($current_xlib) {
+            if {[filter $note $search_tags]} {
+                lappend current_notes $note
+            }
+        }
     }
 
     return $current_notes

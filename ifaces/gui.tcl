@@ -114,12 +114,18 @@ proc ifaces::gui::create_notes_tab {w} {
 # ==== List of connections ====
     set conn_button [menubutton $tools.conn_button \
         -menu $tools.conn_button.menu]
+# TODO: keyboard bindings for "arrow up/down" keys, etc.
+#        -takefocus 1]
     set conn_menu [menu $conn_button.menu -tearoff 0]
     update_connections_menu
     update_connections_menu_label
     pack $conn_button -anchor w -side left
 # TODO: from menubutton to OptionMenu?
 #    set conn_menu [OptionMenu $tools.conn_menu [::plugins::notes::connections]]
+
+# ==== Tags ====
+    set tags [entry $tools.tags]
+    pack $tags -anchor w -side left
 
 # ==== lbox frame ====
     set lbox_frame [frame $w.lbox_frame]
@@ -132,6 +138,7 @@ proc ifaces::gui::create_notes_tab {w} {
     set lbox [listbox $lbox_frame.lbox -takefocus 1 -exportselection 0]
     update_lbox
     focus $lbox
+# TODO: move focus $lbox to update_lbox/update_lbox_at?
 
 # ==== Bind ====
     # From ${PATH_TO_TKABBER}/plugins/chat/histool.tcl
@@ -144,6 +151,10 @@ proc ifaces::gui::create_notes_tab {w} {
 
     bind $lbox <Return> [namespace code {
         edit_note [%W index active]
+    }]
+
+    bind $tags <Return> [namespace code {
+        update_lbox
     }]
 
 # ==== Other ====
@@ -192,7 +203,7 @@ proc ifaces::gui::edit_note {idx args} {
         set tags_str ""
         set text ""
     } else {
-        set source_note [::plugins::notes::get_note $idx]
+        set source_note [::plugins::notes::get_note $idx [get_filter_tags]]
         ::xmpp::private::notes::split $source_note title -> text tags_str
     }
 
@@ -251,6 +262,12 @@ proc ifaces::gui::edit_note_cmd_ok {dialog_w idx} {
     destroy $dialog_w
 }
 
+proc ifaces::gui::get_filter_tags {} {
+    set tags .notes.tools.tags
+
+    return [split [string trim [$tags get] " "] " "]
+}
+
 proc ifaces::gui::update_lbox_at {idx new_note} {
     set lbox .notes.lbox_frame.lbox
 
@@ -258,7 +275,8 @@ proc ifaces::gui::update_lbox_at {idx new_note} {
         $lbox delete $idx $idx
     }
 
-    if {[llength $new_note] != 0} {
+    if {[expr [llength $new_note] != 0] &&
+        [::plugins::notes::filter $new_note [get_filter_tags]]} {
         $lbox insert $idx [get_short_string $new_note]
     }
 
@@ -270,7 +288,7 @@ proc ifaces::gui::update_lbox {} {
 
     $lbox delete 0 end
 
-    foreach note [::plugins::notes::get_notes] {
+    foreach note [::plugins::notes::get_notes [get_filter_tags]] {
         $lbox insert end [get_short_string $note]
     }
 
