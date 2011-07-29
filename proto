@@ -1,0 +1,63 @@
+See XEP-0049.
+
+===================
+Request to receive notes:
+===================
+
+<iq type='get' id='id1'>
+    <query xmlns='jabber:iq:private'>
+        <storage xmlns='http://miranda-im.org/storage#notes'/>
+    </query>
+</iq>
+
+===================
+Positive response:
+===================
+
+<iq type='result' to='myjid@server.tld' id='id1'>
+    <query xmlns='jabber:iq:private'>
+        <storage xmlns='http://miranda-im.org/storage#notes'>
+
+            <note tags='tag1 tag2 tag3'>
+                <title>Title 1</title>
+                <text>Note body 1</text>
+            </note>
+
+            <note tags=''>
+                <title>Title 2</title>
+                <text>Note body 2</text>
+            </note>
+
+        </storage>
+    </query>
+</iq>
+
+===================
+Send notes to server:
+===================
+
+<iq type='set' id='id1'>
+    <query xmlns='jabber:iq:private'>
+        <storage xmlns='http://miranda-im.org/storage#notes'>
+	
+            <note tags='tag1 tag2 tag3'>
+                <title>Title 1</title>
+                <text>Note body</text>
+            </note>
+
+            <note tags=''>
+                <title>Title 2</title>
+                <text>Note body 2</text>
+            </note>
+
+        </storage>
+    </query>
+</iq>
+
+===================
+Positive response:
+===================
+
+<iq type='result' to='myjid@server.tld' id='id1'>
+    <query xmlns='jabber:iq:private'/>
+</iq>
