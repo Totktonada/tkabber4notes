@@ -34,6 +34,8 @@ proc notes::load {} {
     }
 
     source [file join $scriptdir ie.tcl]
+    source [file join $scriptdir gui_actions.tcl]
+    eval gui_actions::load
 
     hook::add disconnected_hook [namespace current]::disconnected
     hook::add connected_hook [namespace current]::connected
@@ -43,6 +45,8 @@ proc notes::load {} {
 
 proc notes::unload {} {
     variable scriptdir
+
+    eval gui_actions::unload
 
 # TODO: think about create list of ifaces on load (in notes::load) and unload them by this list
     set ifaces_dir [file join $scriptdir ifaces]

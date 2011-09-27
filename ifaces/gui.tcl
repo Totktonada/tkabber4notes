@@ -208,6 +208,19 @@ proc ifaces::gui::edit_note {idx args} {
         set title ""
         set tags_str ""
         set text ""
+
+        foreach {key value} $args {
+            switch -- $key {
+                -title -
+                -text -
+                -tags_str {
+                    set [string range $key 1 end] $value
+                }
+                -tags {
+                    set tags_str [join $value " "]
+                }
+            }
+        }
     } else {
         set source_note [::plugins::notes::get_note $idx [get_filter_tags]]
         ::xmpp::private::notes::split $source_note title -> text tags_str
@@ -271,6 +284,10 @@ proc ifaces::gui::edit_note_cmd_ok {dialog_w idx} {
 
 proc ifaces::gui::get_filter_tags {} {
     set tags .notes.tools.tags
+
+    if {![winfo exists .notes]} {
+        return {}
+    }
 
     return [split [string trim [$tags get] " "] " "]
 }
