@@ -83,7 +83,7 @@ proc ::xmpp::private::notes::deserialize {xml} {
     foreach xmldata $xml {
     ::xmpp::xml::split $xmldata tag xmlns attrs cdata subels
 
-    if {[cequal $xmlns "http://miranda-im.org/storage#notes"]} {
+    if {[string equal $xmlns "http://miranda-im.org/storage#notes"]} {
         foreach note $subels {
             ::xmpp::xml::split $note n_tag n_xmlns n_attrs n_cdata n_subels
 

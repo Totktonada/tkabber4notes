@@ -144,13 +144,13 @@ proc notes::free_notes {xlib} {
 # also, see all proc, where run this hook and all proc, added to this hook in gui.tcl
 
     if {[info exists current_xlib]} {
-        if {[cequal $current_xlib $xlib]} {
+        if {[string equal $current_xlib $xlib]} {
             if {[llength [connections]] > 0} {
                 set_current_xlib [lindex [connections] 0]
             } else {
                 unset_current_xlib
             }
-#TODO: need unset current_xlib if {![cequal $current_xlib $xlib]} ?
+#TODO: need unset current_xlib if {![string equal $current_xlib $xlib]} ?
         }
     }
 }
@@ -225,7 +225,7 @@ proc notes::set_note {real_idx idx new_note} {
     if {[llength $new_note] == 0} {
         set notes($current_xlib) [lreplace $notes($current_xlib) $real_idx $real_idx]
     } else {
-        if {[cequal $real_idx end]} {
+        if {[string equal $real_idx end]} {
             lappend notes($current_xlib) $new_note
         } else {
             lset notes($current_xlib) $real_idx $new_note
@@ -273,7 +273,7 @@ proc notes::get_notes {{search_tags {}}} {
 
 # TODO: replace ugly get_real_index with notes id.
 proc notes::get_real_index {idx {search_tags {}}} {
-    if {[cequal $idx end]} {
+    if {[string equal $idx end]} {
         return end
     }
 

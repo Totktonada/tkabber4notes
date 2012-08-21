@@ -204,7 +204,7 @@ proc ifaces::gui::delete_focused_note {} {
 proc ifaces::gui::edit_note {idx args} {
     if {[llength [plugins::notes::connections]] == 0} return
 
-    if {[cequal $idx end]} {
+    if {[string equal $idx end]} {
         set title ""
         set tags_str ""
         set text ""
@@ -295,7 +295,7 @@ proc ifaces::gui::get_filter_tags {} {
 proc ifaces::gui::update_lbox_at {idx new_note} {
     set lbox .notes.lbox_frame.lbox
 
-    if {![cequal $idx end]} {
+    if {![string equal $idx end]} {
         $lbox delete $idx $idx
     }
 
