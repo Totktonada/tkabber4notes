@@ -4,7 +4,7 @@ namespace eval ifaces::gui {
 #    package require msgcat
 }
 
-# TODO: variable lbox in all proc, where $lbox used, changed this variable in create_nptes_tab. Also: conn_menu.
+# TODO: variable lbox in all proc, where $lbox used, changed this variable in create_notes_tab. Also: conn_menu.
 
 proc ifaces::gui::load {} {
     hook::add plugins_notes_changed_connections_hook \
