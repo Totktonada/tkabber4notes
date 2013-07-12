@@ -26,13 +26,13 @@ proc gui_actions::selection_popup {m W X Y x y} {
 }
 
 proc gui_actions::CopySelection {cw} {
-    if {$cw == "."} {
+    if {$cw eq "."} {
         set cw [get_chatwin]
-        if {$cw == ""} return
+        if {$cw eq ""} return
     }
 
     set sel [$cw tag ranges sel]
-    if {$sel == ""} return
+    if {$sel eq ""} return
 
     set text [$cw get [lindex $sel 0] [lindex $sel 1]]
 

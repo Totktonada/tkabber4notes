@@ -85,7 +85,7 @@ proc notes::process_notes {xlib status noteslist} {
     variable notes
     variable current_xlib
 
-    if {$status != "ok"} return
+    if {$status ne "ok"} return
 
  #TODO( maybe not sending event?
     free_notes $xlib
