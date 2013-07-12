@@ -12,8 +12,9 @@ proc gui_actions::unload {} {
 }
 
 proc gui_actions::selection_popup {m W X Y x y} {
-    if {[expr [lempty [$W tag ranges sel]] || \
-        [expr [llength [plugins::notes::connections]] == 0]]} {
+    if {[lempty [$W tag ranges sel]] || \
+        [llength [plugins::notes::connections]] == 0} \
+    {
         set state disabled
     } else {
         set state normal

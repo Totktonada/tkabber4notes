@@ -299,8 +299,9 @@ proc ifaces::gui::update_lbox_at {idx new_note} {
         $lbox delete $idx $idx
     }
 
-    if {[expr [llength $new_note] != 0] &&
-        [::plugins::notes::filter $new_note [get_filter_tags]]} {
+    if {[llength $new_note] != 0 &&
+        [::plugins::notes::filter $new_note [get_filter_tags]]} \
+    {
         $lbox insert $idx [get_short_string $new_note]
     }
 
@@ -392,7 +393,7 @@ proc ifaces::gui::get_short_string {note} {
 if {0} {
     set max_length 30
     if {[string length $short_string] > $max_length} {
-        set short_string "[string range $short_string 0 [expr $max_length - 4]]..."
+        set short_string "[string range $short_string 0 [expr {$max_length - 4}]]..."
     }
 }
 
