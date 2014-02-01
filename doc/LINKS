@@ -1,4 +1,20 @@
-"XEP-0049: Private XML Storage" - http://xmpp.org/extensions/xep-0049.html
-Source of Miranda "Jabber notes" plugin - http://code.google.com/p/miranda/source/browse/trunk/miranda/protocols/JabberG/jabber_notes.cpp
-Description for Psi+ "Storage Notes" plugin - http://psi-plus.com/wiki/doku.php/plugins#storage_notes_plugin
-Source of Psi+ "Storage Notes" plugin - http://psi-dev.googlecode.com/svn/trunk/plugins/generic/storagenotesplugin/
+XEP-0049: Private XML Storage
+http://xmpp.org/extensions/xep-0049.html
+
+Protocol description from author of Tkabber "notes" plugin
+http://svn.xmpp.ru/repos/tkabber-3rd-party/trunk/plugins/notes/doc/proto
+
+Source of Miranda "Jabber notes" plugin
+http://code.google.com/p/miranda/source/browse/trunk/miranda/protocols/JabberG/jabber_notes.cpp
+
+Description for Psi+ "Storage Notes" plugin
+http://psi-plus.com/wiki/doku.php/plugins#storage_notes_plugin
+
+Source of Psi+ "Storage Notes" plugin
+http://psi-dev.googlecode.com/svn/trunk/plugins/generic/storagenotesplugin/
+
+Related JTalk (mobile jabber client) issue (resolved)
+https://bitbucket.org/ustyugov/jtalk/issue/61/
+
+Collection of links related to miranda-compatible notes plugins for Jabber clients (this document)
+http://svn.xmpp.ru/repos/tkabber-3rd-party/trunk/plugins/notes/doc/LINKS
