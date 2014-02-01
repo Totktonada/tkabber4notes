@@ -135,6 +135,7 @@ proc notes::free_notes {xlib} {
     variable notes
     variable current_xlib
 
+    # TODO: can 'xlib' contain special glob symbols or ","?
     array unset notes $xlib
     hook::run plugins_notes_changed_connections_hook
 # TODO: possibly, comfortable variant:
